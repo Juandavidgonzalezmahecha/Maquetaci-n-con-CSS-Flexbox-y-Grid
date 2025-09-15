@@ -1,0 +1,332 @@
+<!--
+  index.html
+  Proyecto: Replicación de barra de navegación + tarjetas (Grid + Flexbox)
+  Autor: Estudiante de Ingeniería Multimedia - 6º semestre
+  Nota: Archivo único con HTML + CSS embebidos
+-->
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nav + Cards - Single File</title>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root{
+      --bg: #d9d9d9;
+      --card-bg: #ffffff;
+      --accent: #f7a81a;
+      --accent-dark: #f59f1b;
+      --text: #111;
+      --muted: #444;
+      --card-radius: 18px;
+
+      --bg-top: linear-gradient(to bottom, #ffffff, #c9f0ff 50%);
+      --icon-color: #000;
+      --separator: rgba(0,0,0,0.9);
+      --gap: 64px;
+    }
+
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* NAV */
+    .topbar {
+      background: var(--bg-top);
+      padding: 30px 20px;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+    }
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 1fr;
+      gap: var(--gap);
+      align-items: center;
+      justify-items: center;
+    }
+    .nav-item{
+      position: relative;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      color: var(--icon-color);
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      padding: 0;
+      transition: transform .18s cubic-bezier(.2,.9,.2,1), color .18s ease;
+    }
+    .icon-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition: transform .18s ease;
+      transform-origin:center;
+      line-height: 0;
+    }
+    .nav-label{
+      font-size:13px;
+      color: #111;
+    }
+    .nav-item::after{
+      content: "";
+      position: absolute;
+      right: calc(-1 * (var(--gap)/2 - 10px));
+      top: 50%;
+      transform: translateY(-50%) scaleY(1);
+      width: 2px;
+      height: 46%;
+      background: var(--separator);
+      transition: transform .18s ease, width .18s ease, background .18s ease, height .18s ease;
+      border-radius: 2px;
+    }
+    .nav-item:last-child::after{ display:none; }
+    .nav-item:hover,
+    .nav-item:focus{
+      transform: translateY(-4px);
+      color: var(--accent);
+      outline: none;
+    }
+    .nav-item:hover .icon-wrap,
+    .nav-item:focus .icon-wrap{
+      transform: scale(1.18);
+    }
+    .nav-item:hover .nav-label,
+    .nav-item:focus .nav-label{
+      color: var(--accent);
+      font-weight:700;
+    }
+    .nav-item:hover::after,
+    .nav-item:focus::after{
+      transform: translateY(-50%) scaleY(1.4);
+      width: 4px;
+      height: 62%;
+      background: var(--accent-dark);
+    }
+    svg { width:64px; height:64px; display:block; color: currentColor; }
+    .nav-item:focus-visible{
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      border-radius: 8px;
+    }
+    @media (max-width: 900px){
+      .nav{ gap: 36px; grid-auto-columns: auto; padding: 0 12px; }
+      svg{ width:52px; height:52px; }
+    }
+    @media (max-width: 520px){
+      .nav{ gap: 18px; grid-auto-columns: auto; padding: 0 10px; }
+      svg{ width:44px; height:44px; }
+      .nav-label{ font-size:12px; }
+    }
+
+    /* CARDS */
+    .stage {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px;
+      background: transparent;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      align-items: start;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow:
+        0 10px 14px rgba(0,0,0,0.08),
+        0 22px 30px rgba(0,0,0,0.10);
+      display: flex;
+      flex-direction: column;
+      min-height: 480px;
+      position: relative;
+    }
+    .card-img {
+      height: 140px;
+      width: 100%;
+      object-fit: cover;
+      display: block;
+      flex: 0 0 auto;
+      border-top-left-radius: var(--card-radius);
+      border-top-right-radius: var(--card-radius);
+    }
+    .card-body {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1 1 auto;
+    }
+    .card-title {
+      font-size: 34px;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1;
+      margin-top: -8px;
+    }
+    .card-text {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+      flex: 1 1 auto;
+    }
+    .card-action {
+      display: flex;
+      justify-content: center;
+      padding-bottom: 6px;
+      padding-top: 6px;
+    }
+    .btn {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      text-decoration: none;
+      background: linear-gradient(180deg,var(--accent), var(--accent-dark));
+      padding: 12px 56px;
+      border-radius: 999px;
+      color: #111;
+      font-weight: 800;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.06);
+      transition: transform .18s cubic-bezier(.2,.9,.2,1), box-shadow .18s ease, filter .18s ease;
+      letter-spacing: .2px;
+      z-index: 0;
+    }
+    .btn::before{
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 52%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.08));
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+      mix-blend-mode: overlay;
+    }
+    .btn:hover,
+    .btn:focus {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.12);
+      outline: none;
+    }
+    .btn:hover::before,
+    .btn:focus::before {
+      opacity: 1;
+    }
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 0 rgba(0,0,0,0.06);
+    }
+    .btn:focus-visible {
+      outline: 3px solid rgba(255,200,60,0.18);
+      outline-offset: 4px;
+    }
+    .card::after{
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      height: 14px;
+      border-radius: 10px;
+      filter: blur(6px);
+      background: rgba(0,0,0,0.06);
+      z-index: -1;
+    }
+    @media (max-width: 1100px){
+      .cards { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px){
+      .stage { padding: 18px; }
+      .cards { grid-template-columns: 1fr; gap: 20px; }
+      .card { min-height: 520px; }
+      .card-img { height: 180px; }
+      .card-title { font-size: 28px; }
+      .btn { padding: 12px 36px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <header class="topbar">
+    <nav class="nav">
+      <button class="nav-item">
+        <span class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.293l8 7V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1V10.293l8-7z"/></svg>
+        </span>
+        <span class="nav-label">Home</span>
+      </button>
+      <button class="nav-item">
+        <span class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.3l-6.16 3.73 1.64-7.03L2 9.78l7.2-.62L12 2l2.8 7.16 7.2.62-5.48 4.22 1.64 7.03z"/></svg>
+        </span>
+        <span class="nav-label">Favorites</span>
+      </button>
+      <button class="nav-item">
+        <span class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4h-2l-1 2v2h2l3.6 7.59-1.35 2.45A1 1 0 0 0 9 19h10v-2H9.42c.03 0 .06-.02.08-.04L9 16.5l7.45-4.47A1 1 0 0 0 16 11H8.21l-.94-2H20V7H8.53L7 4z"/></svg>
+        </span>
+        <span class="nav-label">Cart</span>
+      </button>
+      <button class="nav-item">
+        <span class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12l4-2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/></svg>
+        </span>
+        <span class="nav-label">Message</span>
+      </button>
+      <button class="nav-item">
+        <span class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-5 0-9 3-9 6v2h18v-2c0-3-4-6-9-6z"/></svg>
+        </span>
+        <span class="nav-label">Account</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- CARDS -->
+  <main class="stage">
+    <section class="cards">
+      <article class="card">
+        <img class="card-img" src="https://img.asmedia.epimg.net/resizer/v2/X6PWE7NVQFCU3IDCU3NQZG3ZBE.png?auth=3918621fc58aeb6f1cbb2646edbf20c0538686bfb7350383f2e6b277c656159e&width=1200&height=675&smart=true" alt="Feria de Cali imagen">
+        <div class="card-body">
+          <h2 class="card-title">Feria de Cali</h2>
+          <p class="card-text">¡La Feria de Cali es la mejor! Siempre tengo una gran cantidad de diversión y me encanta la comida. Es una de mis cosas favoritas de la ciudad. ¡Es una experiencia que no te puedes perder!</p>
+          <div class="card-action"><a class="btn" href="#">Ver más</a></div>
+        </div>
+      </article>
+      <article class="card">
+        <img class="card-img" src="https://static.laverdad.es/www/multimedia/202203/27/media/cartaval-barranquilla/1barran%20(40).jpg" alt="Carnavales imagen">
+        <div class="card-body">
+          <h2 class="card-title">Carnavales</h2>
+          <p class="card-text">¡A divertirse en los carnavales colombianos! Esta época del año es siempre una de mis favoritas. Es una buena oportunidad para salir con amigos, disfrutar de la música y bailar hasta el amanecer.</p>
+          <div class="card-action"><a class="btn" href="#">Ver más</a></div>
+        </div>
+      </article>
+      <article class="card">
+        <img class="card-img" src="https://revistamomentos.co/wp-content/uploads/2025/08/SILLETEROS-1-1200x630.jpg" alt="Fiestas y flores imagen">
+        <div class="card-body">
+          <h2 class="card-title">Fiestas y flores</h2>
+          <p class="card-text">¡Vamos a la feria de las flores! Estoy emocionada por ver todas las flores hermosas y los colores vibrantes. ¡Será una experiencia increíble, no puedo esperar para verlo todo!</p>
+          <div class="card-action"><a class="btn" href="#">Ver más</a></div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
